@@ -3,13 +3,14 @@ import {
   loadTodosSuccess,
   loadTodosFailure,
 } from "./actions";
+import axios from "axios";
 
 export const loadTodos = () => async (dispatch, getState) => {
   try {
     dispatch(loadTodosInProgress());
-    const todos = await fetch("http://localhost:8080/todos")
-      .then((response) => response.json())
-      .then(dispatch(loadTodosSuccess(todos)));
+    const response = await fetch("http://localhost:8080/todos");
+    const todos = await response.json();
+    dispatch(loadTodosSuccess(todos));
   } catch (e) {
     dispatch(loadTodosFailure());
     dispatch(displayAlert(e));
